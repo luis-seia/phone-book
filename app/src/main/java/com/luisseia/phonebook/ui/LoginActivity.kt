@@ -16,9 +16,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        binding.textSignUp.setOnClickListener {  }
+        binding.textSignUp.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+        }
+        binding.textRecover.setOnClickListener {
 
-        binding.textRecover.setOnClickListener {  }
+        }
+
 
     }
 }

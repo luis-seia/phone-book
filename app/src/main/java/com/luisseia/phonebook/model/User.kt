@@ -1,7 +1,9 @@
 package com.luisseia.phonebook.model
 
 class User(
-    val id: Int,
-    val userName: String = "",
+    val id: Int =0,
+    val username: String = "",
     val password: String = ""
-)
+) {
+
+}

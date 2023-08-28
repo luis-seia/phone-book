@@ -40,6 +40,7 @@
             android:id="@+id/editPassSign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:hint="password" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,20 +56,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
-    <TextView
-        android:id="@+id/textSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Do you have an account? Login!"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout3"
         android:layout_width="0dp"
@@ -83,6 +70,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editConfirmPass"
             android:layout_width="match_parent"
+            android:inputType="textPassword"
             android:layout_height="wrap_content"
             android:hint="Confirm password" />
     </com.google.android.material.textfield.TextInputLayout>
