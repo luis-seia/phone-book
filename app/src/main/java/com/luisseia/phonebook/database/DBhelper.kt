@@ -4,11 +4,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.luisseia.phonebook.model.Contact
 import com.luisseia.phonebook.model.User
 
 class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null, 1) {
  val sql = arrayOf(
-  "CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)"
+  "CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)",
+  "CREATE TABLE contact (id INTEGER PRIMARY KEY AUTOINCREMENT, adress TEXT, name TEXT, email TEXT, phone TEXT, imageID INT"
  )
 
  override fun onCreate(p0: SQLiteDatabase) {
@@ -87,6 +89,103 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
   }
 
  }
+
+ // CRUD CONTACT
+
+ fun insertContact ( name : String, email : String, phone : Int, imageId : Int) : Long {
+  val db = this.writableDatabase
+  val contentValues = ContentValues()
+  contentValues.put("name", name)
+  contentValues.put("email", email)
+  contentValues.put("phone", phone)
+  contentValues.put("imageId", imageId)
+  val res =  db.insert("contact", null, contentValues)
+  db.close()
+  return res
+
+ }
+
+ fun updateContact(id : Int, adress : String, name : String, email : String, phone : Int, imageId : Int): Int {
+  val db = this.writableDatabase
+  val contentValues = ContentValues()
+  contentValues.put("name", name)
+  contentValues.put("email", email)
+  contentValues.put("adress", adress)
+  contentValues.put("phone", phone)
+  contentValues.put("imageId", imageId)
+  val res =  db.update("contact", contentValues, "id=?", arrayOf(id.toString()))
+  db.close()
+  return res
+ }
+
+ fun deleteContact(id: Int): Int {
+  val db = this.writableDatabase
+
+
+  val res =  db.delete("contact",  "id=?", arrayOf(id.toString()))
+  db.close()
+  return res
+ }
+
+ fun getContact(id: Int): Contact {
+  val db = this.readableDatabase
+  val query = db.rawQuery("SELECT * FROM contacts WHERE id=?", arrayOf(id.toString()))
+
+  var contact = Contact()
+  if(query.count == 1){
+   query.moveToFirst()
+   val idIndex =  query.getColumnIndex("id")
+   val nameIndex = query.getColumnIndex("name")
+   val emailIndex = query.getColumnIndex("email")
+   val adressIndex = query.getColumnIndex("adress")
+  val phoneIndex =  query.getColumnIndex("phone")
+  val imagedIdIndex = query.getColumnIndex("imageId")
+
+
+   contact  = Contact(
+    id = query.getInt(idIndex),
+    name = query.getString(nameIndex),
+    adress = query.getString(adressIndex),
+    email = query.getString(emailIndex),
+    phone =  query.getLong(phoneIndex),
+    imageId = query.getInt(imagedIdIndex)
+   )
+  }
+  db.close()
+  return contact
+ }
+
+ fun getAllContact() : ArrayList<Contact>{
+  val db = this.readableDatabase
+  val query = db.rawQuery("SELECT * FROM  contact", null)
+  var listContact = ArrayList<Contact>()
+  var contact = Contact()
+  if(query.count > 0 ){
+   query.moveToFirst()
+   val idIndex =  query.getColumnIndex("id")
+   val nameIndex = query.getColumnIndex("name")
+   val adressIndex = query.getColumnIndex("adress")
+   val emailIndex = query.getColumnIndex("email")
+   val phoneIndex =  query.getColumnIndex("phone")
+   val imagedIdIndex = query.getColumnIndex("imageId")
+
+   do {
+    contact  = Contact(
+     id = query.getInt(idIndex),
+     name = query.getString(nameIndex),
+     adress = query.getString(adressIndex),
+     email = query.getString(emailIndex),
+     phone =  query.getLong(phoneIndex),
+     imageId = query.getInt(imagedIdIndex)
+    )
+    listContact.add(contact)
+   } while (query.moveToNext())
+
+  }
+  db.close()
+  return listContact
+ }
+
 }
 
 
