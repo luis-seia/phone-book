@@ -19,6 +19,14 @@ class LoginActivity : AppCompatActivity() {
 
         val db = DBhelper(this)
         sharedPreferences = application.getSharedPreferences("login", Context.MODE_PRIVATE)
+        val sharedusername = sharedPreferences.getString("username","")
+        if (sharedusername != null) {
+            if(sharedusername.isNotEmpty()){
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+        }
+
+
 
         binding.buttonLogin.setOnClickListener{
             val username =  binding.editEmailLogin.text.toString()
