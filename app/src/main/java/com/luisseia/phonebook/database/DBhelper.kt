@@ -97,7 +97,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
   val contentValues = ContentValues()
   contentValues.put("name", name)
   contentValues.put("email", email)
-  contentValues.put("adress", address)
+  contentValues.put("address", address)
   contentValues.put("phone", phone)
   contentValues.put("imageId", imageId)
   val res =  db.insert("contact", null, contentValues)
@@ -149,7 +149,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
     adress = query.getString(addressIndex),
     email = query.getString(emailIndex),
     phone =  query.getLong(phoneIndex),
-    imageId = query.getInt(imagedIdIndex)
+    imageId = 8
    )
   }
   db.close()
@@ -177,7 +177,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
      adress = query.getString(addressIndex),
      email = query.getString(emailIndex),
      phone =  query.getLong(phoneIndex),
-     imageId = query.getInt(imagedIdIndex)
+     imageId = 2
     )
     listContact.add(contact)
    } while (query.moveToNext())

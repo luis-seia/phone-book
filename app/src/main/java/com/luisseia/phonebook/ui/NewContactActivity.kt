@@ -40,6 +40,7 @@ class NewContactActivity : AppCompatActivity() {
         binding.buttonCancel.setOnClickListener{
             setResult(0, i)
             finish()
+            Toast.makeText(applicationContext, " Canceled", Toast.LENGTH_SHORT)
         }
     }
 }

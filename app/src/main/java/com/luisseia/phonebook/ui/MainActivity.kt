@@ -21,14 +21,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var contactList : ArrayList<Contact>
     private lateinit var adapter: ArrayAdapter<Contact>
     private lateinit var result: ActivityResultLauncher<Intent>
+    private lateinit var dBhelper : DBhelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =  ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val dBhelper = DBhelper(this)
+         dBhelper = DBhelper(this)
         val sharedPreferences = application.getSharedPreferences("login", Context.MODE_PRIVATE)
-
+        loadList()
         binding.buttonLogout.setOnClickListener {
             val editor : SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("username", "")
@@ -36,11 +38,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        contactList =  dBhelper.getAllContact()
-
-         adapter = ArrayAdapter(applicationContext, android.R.layout.simple_list_item_1, contactList)
-
-        binding.list.adapter = adapter
 
         binding.buttonAdd.setOnClickListener{
                 result.launch(Intent(applicationContext, NewContactActivity::class.java))
@@ -48,11 +45,26 @@ class MainActivity : AppCompatActivity() {
 
         result = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if(it.data != null && it.resultCode == 1){
-                contactList =  dBhelper.getAllContact()
-                adapter.notifyDataSetChanged()
+                loadList()
             }else if(it.data != null && it.resultCode == 0) {
                 Toast.makeText(applicationContext, "Operation canceled", Toast.LENGTH_SHORT)
             }
         }
+
+
+        binding.list.setOnItemClickListener { adapterView, view, i, l ->
+            val intent = Intent(applicationContext, ContactDetailActivity::class.java)
+            intent.putExtra("id", contactList[i].id)
+            result.launch(intent)
+        }
+    }
+
+    fun loadList(){
+
+        contactList =  dBhelper.getAllContact()
+
+        adapter = ArrayAdapter(applicationContext, android.R.layout.simple_list_item_1, contactList)
+
+        binding.list.adapter = adapter
     }
 }
