@@ -9,8 +9,8 @@ import com.luisseia.phonebook.model.User
 
 class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null, 1) {
  val sql = arrayOf(
-  "CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)",
-  "CREATE TABLE contact (id INTEGER PRIMARY KEY AUTOINCREMENT, adress TEXT, name TEXT, email TEXT, phone TEXT, imageID INT"
+  "CREATE TABLE users  ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)",
+  "CREATE TABLE contact  (id INTEGER PRIMARY KEY AUTOINCREMENT, address TEXT, name TEXT, email TEXT, phone TEXT, imageID INT)"
  )
 
  override fun onCreate(p0: SQLiteDatabase) {
@@ -92,11 +92,12 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
 
  // CRUD CONTACT
 
- fun insertContact ( name : String, email : String, phone : Int, imageId : Int) : Long {
+ fun insertContact ( name : String, address : String, email : String, phone : Int, imageId : Int) : Long {
   val db = this.writableDatabase
   val contentValues = ContentValues()
   contentValues.put("name", name)
   contentValues.put("email", email)
+  contentValues.put("adress", address)
   contentValues.put("phone", phone)
   contentValues.put("imageId", imageId)
   val res =  db.insert("contact", null, contentValues)
@@ -105,12 +106,12 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
 
  }
 
- fun updateContact(id : Int, adress : String, name : String, email : String, phone : Int, imageId : Int): Int {
+ fun updateContact(id : Int, address : String, name : String, email : String, phone : Int, imageId : Int): Int {
   val db = this.writableDatabase
   val contentValues = ContentValues()
   contentValues.put("name", name)
   contentValues.put("email", email)
-  contentValues.put("adress", adress)
+  contentValues.put("adress", address)
   contentValues.put("phone", phone)
   contentValues.put("imageId", imageId)
   val res =  db.update("contact", contentValues, "id=?", arrayOf(id.toString()))
@@ -129,7 +130,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
 
  fun getContact(id: Int): Contact {
   val db = this.readableDatabase
-  val query = db.rawQuery("SELECT * FROM contacts WHERE id=?", arrayOf(id.toString()))
+  val query = db.rawQuery("SELECT * FROM contact WHERE id=?", arrayOf(id.toString()))
 
   var contact = Contact()
   if(query.count == 1){
@@ -137,7 +138,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
    val idIndex =  query.getColumnIndex("id")
    val nameIndex = query.getColumnIndex("name")
    val emailIndex = query.getColumnIndex("email")
-   val adressIndex = query.getColumnIndex("adress")
+   val addressIndex = query.getColumnIndex("address")
   val phoneIndex =  query.getColumnIndex("phone")
   val imagedIdIndex = query.getColumnIndex("imageId")
 
@@ -145,7 +146,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
    contact  = Contact(
     id = query.getInt(idIndex),
     name = query.getString(nameIndex),
-    adress = query.getString(adressIndex),
+    adress = query.getString(addressIndex),
     email = query.getString(emailIndex),
     phone =  query.getLong(phoneIndex),
     imageId = query.getInt(imagedIdIndex)
@@ -164,7 +165,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
    query.moveToFirst()
    val idIndex =  query.getColumnIndex("id")
    val nameIndex = query.getColumnIndex("name")
-   val adressIndex = query.getColumnIndex("adress")
+   val addressIndex = query.getColumnIndex("address")
    val emailIndex = query.getColumnIndex("email")
    val phoneIndex =  query.getColumnIndex("phone")
    val imagedIdIndex = query.getColumnIndex("imageId")
@@ -173,7 +174,7 @@ class DBhelper(context :Context) : SQLiteOpenHelper(context, "database.db", null
     contact  = Contact(
      id = query.getInt(idIndex),
      name = query.getString(nameIndex),
-     adress = query.getString(adressIndex),
+     adress = query.getString(addressIndex),
      email = query.getString(emailIndex),
      phone =  query.getLong(phoneIndex),
      imageId = query.getInt(imagedIdIndex)

@@ -1,12 +1,45 @@
 package com.luisseia.phonebook.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.luisseia.phonebook.R
+import com.luisseia.phonebook.database.DBhelper
+import com.luisseia.phonebook.databinding.ActivityNewContactBinding
 
 class NewContactActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityNewContactBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_contact)
+        binding = ActivityNewContactBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val db = DBhelper(applicationContext)
+        val i = intent
+
+        binding.buttonSave.setOnClickListener{
+            val name = binding.editName.text.toString()
+            val address = binding.adress.text.toString()
+            val phone =  binding.editNumber.text.toString().toInt()
+            val email = binding.editEmail.text.toString()
+            val imageId = 1
+
+            if (name.isNotEmpty() && address.isNotEmpty() && email.isNotEmpty()){
+                val res = db.insertContact(name, address, email,phone , imageId )
+                if (res>0){
+                    Toast.makeText(applicationContext, " Saved", Toast.LENGTH_SHORT)
+                    finish()
+                    setResult(1, i)
+                }else{
+                    Toast.makeText(applicationContext, " Insert Error", Toast.LENGTH_SHORT)
+                }
+            }
+        }
+
+        binding.buttonCancel.setOnClickListener{
+            setResult(0, i)
+            finish()
+        }
     }
 }
