@@ -28,7 +28,11 @@ class NewContactActivity : AppCompatActivity() {
             val address = binding.adress.text.toString()
             val phone =  binding.editNumber.text.toString().toInt()
             val email = binding.editEmail.text.toString()
-            val imageId = 1
+
+            var imageId = -1
+            if (id != null){
+                imageId = id as Int
+            }
 
             if (name.isNotEmpty() && address.isNotEmpty() && email.isNotEmpty()){
                 val res = db.insertContact(name, address, email,phone , imageId )
@@ -53,11 +57,11 @@ class NewContactActivity : AppCompatActivity() {
         }
 
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            if (it.data == null && it.resultCode == 1){
+            if (it.data != null && it.resultCode == 1){
                  id = it.data?.extras?.getInt("id")
                 binding.imageView2.setImageDrawable(resources.getDrawable(id!!))
             }else{
-                id = 1
+                id = -1
                 binding.imageView2.setImageResource(R.drawable.avatar1)
             }
         }
