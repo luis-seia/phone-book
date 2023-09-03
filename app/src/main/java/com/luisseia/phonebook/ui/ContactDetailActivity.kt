@@ -79,6 +79,11 @@ class ContactDetailActivity : AppCompatActivity() {
             binding.layoutEditDelete.visibility =  View.GONE
         }
 
+        binding.buttonBack.setOnClickListener {
+            setResult(0, i)
+            finish()
+        }
+
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.data != null && it.resultCode == 1){
                 imageId = it.data?.extras?.getInt("id")
